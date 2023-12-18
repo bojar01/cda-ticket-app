@@ -20,27 +20,7 @@
 	<div class="example-wrapper">
 		<h1>Hello
 			{{ controller_name }}! ✅</h1>
-		<section class="container-fluid">
-			<div class="row">
-				{% for task in tasks %}
-					<div class="col-md-4">
-						<div class="card" style="width: 18rem;">
-							<img src="https://picsum.photos/seed/picsum/200/300" class="card-img-top" alt="Lorem Piscum">
-							<div class="card-body">
-								<h5 class="card-title">{{ task.title }}</h5>
-								<p class="card-text">
-									{{ task.description }}
-								</p>
-								{# <a href="{{ path('app_tasks_show', {'id': task.id}) }}">show</a>
-								<a href="{{ path('app_tasks_edit', {'id': task.id}) }}">edit</a> #}
-							</div>
-						</div>
-					</div>
-				{% else %}
-					<p>no records found</p>
-				{% endfor %}
-			</div>
-		</section>
+	
 
 	</div>
 {% endblock %}
