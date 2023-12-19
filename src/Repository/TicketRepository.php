@@ -45,4 +45,24 @@ class TicketRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+        public function findLowDataTickets()
+        {
+            $entityManager = $this->getEntityManager();
+
+            $sql = "SELECT technology.name AS technology, CONCAT(user.firstname, ' ' , user.lastname) AS name, ticket.subject FROM ticket 
+            LEFT JOIN technology ON technology_id = technology.id
+            LEFT JOIN user ON owner_id = user.id";
+    
+            $stmt = $entityManager->getConnection()->prepare($sql);
+            // if($excludePostId !== null){
+            //     $stmt->bindValue('excludePostId', $excludePostId);
+            // }
+    
+            $result = $stmt->executeQuery();
+    
+            // $stmt->
+    
+            return $result->fetchAllAssociative();   
+        }
 }
