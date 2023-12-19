@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    public const ROLE_USER = 'ROLE_USER';
+    public const ROLE_STUDENT = 'ROLE_STUDENT';
     public const ROLE_ADMIN = 'ROLE_ADMIN';
 
     #[ORM\Id]
@@ -49,10 +49,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $authorized = null;
 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $created_at = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $updated_at = null;
+
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
-        $this->roles = [self::ROLE_USER];
+        $this->roles = [self::ROLE_STUDENT];
+        $this->created_at= new \DateTimeImmutable();
+        $this->updated_at= new \DateTimeImmutable();
+        $this->authorized= false;
     }
 
     public function getId(): ?int
@@ -88,8 +97,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        // guarantee every user at least has ROLE_STUDENT
+        $roles[] = 'ROLE_STUDENT';
 
         return array_unique($roles);
     }
@@ -199,6 +208,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAuthorized(bool $authorized): static
     {
         $this->authorized = $authorized;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt(\DateTimeImmutable $updated_at): static
+    {
+        $this->updated_at = $updated_at;
 
         return $this;
     }

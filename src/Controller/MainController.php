@@ -9,8 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class MainController extends AbstractController
 {
-    // #[IsGranted('ROLE_USER')]
-    
+    #[IsGranted('ROLE_STUDENT')]
     #[Route('/', name: 'home')]
     public function index(): Response
     {
