@@ -17,7 +17,7 @@
 								<div class="card-body">
 									<p>Ticket #{{ ticket.id }}</p>
 									<h5 class="card-title">Session
-										{{ ticket.owner.session.name }}</h5>
+										<span class="badge fs-5 bg-main-color">{{ ticket.owner.session.name }}</span></h5>
 									<h2>{{ ticket.owner.firstname }}
 										{{ ticket.owner.lastname }}!</h2>
 									<p class="card-text">En
@@ -25,14 +25,51 @@
 									<p>{{ ticket.subject }}</p>
 									<p>
 										{% if ticket.priority %}
-											<span class="badge bg-warning">Élevée</span>
+											<span class="badge bg-warning fs-6">Élevée</span>
 										{% else %}
-											<span class="badge bg-success">Normale</span>
+											<span class="badge bg-success fs-6">Normale</span>
 										{% endif %}
 									</p>
 								</div>
 								<div class="text-center mb-3">
-									<a href="{{ path('app_ticket_show', {'id': ticket.id}) }}" class="btn btn-primary col-5">
+									<a href="{{ path('app_ticket_show', {'id': ticket.id}) }}" class="btn perso-button-main col-5">
+										Voir
+									</a>
+								</div>
+							</div>
+						</div>
+					{% endif %}
+				{% endfor %}
+			</div>
+		</section>
+		<div class="col-12">
+		<h1>New Ticket !</h1> 
+	</div>
+		<section class="container">
+			<div class="row justify-content-center">
+				{% for ticket in tickets %}
+					{% if ticket.id != ticket.owner.id %}
+						<div class="col-4 p-2">
+							<div class="card h-100">
+								<div class="card-body">
+									<p>Ticket #{{ ticket.id }}</p>
+									<h5 class="card-title">Session
+										<span class="badge fs-5 bg-main-color">{{ ticket.owner.session.name }}</span></h5>
+									<h2>{{ ticket.owner.firstname }}
+										{{ ticket.owner.lastname }}!</h2>
+									<p class="card-text">En
+										{{ ticket.technology.name }}</p>
+									<p>{{ ticket.subject }}</p>
+									<p>
+										{% if ticket.priority %}
+											<span class="badge bg-warning fs-6">Élevée</span>
+										{% else %}
+											<span class="badge bg-success fs-6">Normale</span>
+										{% endif %}
+									</p>
+								</div>
+								<div class="text-center mb-3">
+									<a href="{{ path('app_ticket_show', {'id': ticket.id}) }}" class="btn perso-button-main col-5">
 										Voir
 									</a>
 								</div>

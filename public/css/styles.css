@@ -9,4 +9,9 @@ footer {
 .perso-button-light {
   background-color: #FFFFFF;
   color: #315397;
+}
+
+.perso-button-main {
+  background-color: #315397;
+  color: #FFFFFF;
 }/*# sourceMappingURL=styles.css.map */
