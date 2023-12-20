@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Status;
 use App\Entity\Ticket;
 use App\Form\TicketType;
+use App\Form\TicketEditType;
+use App\Repository\StatusRepository;
 use App\Repository\TicketRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,15 +27,20 @@ class TicketController extends AbstractController
     }
     #[IsGranted('ROLE_STUDENT')]
     #[Route('/new', name: 'app_ticket_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, StatusRepository $statusRepository): Response
     {
         $ticket = new Ticket();
+        $status = $statusRepository->findall();
+        
+
+        // dd($status);
         $owner = $this->getUser();
         $form = $this->createForm(TicketType::class, $ticket);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $ticket->setOwner($owner);
+            $ticket->setStatus($status[0]);
             $entityManager->persist($ticket);
             $entityManager->flush();
 
@@ -56,7 +64,7 @@ class TicketController extends AbstractController
     #[Route('/{id}/edit', name: 'app_ticket_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Ticket $ticket, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(TicketType::class, $ticket);
+        $form = $this->createForm(TicketEditType::class, $ticket);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

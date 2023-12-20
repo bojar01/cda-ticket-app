@@ -50,9 +50,11 @@ class TicketRepository extends ServiceEntityRepository
         {
             $entityManager = $this->getEntityManager();
 
-            $sql = "SELECT technology.name AS technology, CONCAT(user.firstname, ' ' , user.lastname) AS name, ticket.subject FROM ticket 
+            $sql = "SELECT technology.name AS technology, CONCAT(user.firstname, ' ' , user.lastname) AS name, ticket.subject, status.name FROM ticket 
             LEFT JOIN technology ON technology_id = technology.id
-            LEFT JOIN user ON owner_id = user.id";
+            LEFT JOIN user ON owner_id = user.id
+			LEFT JOIN status ON status_id = status.id
+WHERE status.name = 'En attente'";
     
             $stmt = $entityManager->getConnection()->prepare($sql);
             // if($excludePostId !== null){
