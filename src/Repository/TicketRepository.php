@@ -46,6 +46,17 @@ class TicketRepository extends ServiceEntityRepository
 //        ;
 //    }
 
+    public function findTicketsWhereStatusAndExcludedUser($id, $status)
+    {
+        return $this->createQueryBuilder('t')
+                ->where('t.owner != :id')
+                ->setParameter('id' , $id)
+                ->andWhere('t.status = :status')
+                ->setParameter('status', $status)
+                ->getQuery()
+                ->execute();
+    }
+
         public function findLowDataTickets()
         {
             $entityManager = $this->getEntityManager();

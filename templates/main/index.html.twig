@@ -18,7 +18,7 @@
 								<div class="card-body">
 									<p>Ticket #{{ ticket.id }}</p>
 									<h5 class="card-title">Session
-										<span class="badge fs-5 bg-main-color">{{ ticket.owner.session.name }}</span></h5>
+										<span class="badge fs-5 bg-main-color">{{ ticket.owner.session ? ticket.owner.session.name : '' }}</span></h5>
 									<h2>{{ ticket.owner.firstname }}
 										{{ ticket.owner.lastname }}!</h2>
 									<p class="card-text">En
@@ -50,9 +50,12 @@
 
 
 	</div>
+		<div>
+			<h2>Mes tickets</h2>
+		</div>
 		<section class="container">
 			<div class="row justify-content-center">
-				{% for ticket in tickets %}
+				{% for ticket in userTickets %}
 					{% if ticket.id != ticket.owner.id %}
 						<div class="col-4 p-2">
 							<div class="card h-100">

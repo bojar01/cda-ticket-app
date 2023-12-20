@@ -31,7 +31,6 @@ class TicketController extends AbstractController
     {
         $ticket = new Ticket();
         $status = $statusRepository->findall();
-        
 
         // dd($status);
         $owner = $this->getUser();
@@ -78,6 +77,40 @@ class TicketController extends AbstractController
             'ticket' => $ticket,
             'form' => $form,
         ]);
+    }
+
+    #[Route('/{id}/angel', name: 'app_ticket_angel', methods:['POST'])]
+    public function angel(Request $request, Ticket $ticket, StatusRepository $status , EntityManagerInterface $entityManager):Response
+    {
+        if($this->isCsrfTokenValid('angel' . $ticket->getId(), $request->request->get('_token'))){
+            $allStatus = $status->findAll();
+
+            $user = $this->getUser();
+
+            $ticket->setAngel($user);
+            $ticket->setStatus($allStatus[1]);
+
+            $entityManager->flush();
+            // dd($ticket);
+        }
+        return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/unsetangel', name: 'app_ticket_unsetangel', methods:['POST'])]
+    public function unresolved(Request $request, Ticket $ticket, StatusRepository $status , EntityManagerInterface $entityManager):Response
+    {
+        if($this->isCsrfTokenValid('unsetangel' . $ticket->getId(), $request->request->get('_token'))){
+            $allStatus = $status->findAll();
+
+            $user = $this->getUser();
+
+            $ticket->setAngel(null);
+            $ticket->setStatus($allStatus[0]);
+
+            $entityManager->flush();
+            // dd($ticket);
+        }
+        return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/{id}', name: 'app_ticket_delete', methods: ['POST'])]
