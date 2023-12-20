@@ -21,5 +21,34 @@
 		<h1>Hello
 			{{ controller_name }}! ✅</h1>
 
+		<h2>Requete en cours</h2>
+		{{ dump(tickets) }}
+		<table>
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Technologie</th>
+					<th>Probleme</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for ticket in tickets %}
+				<tr>
+					<td>{{ ticket.owner.firstname }}</td>
+					<td>{{ ticket.technology.name }}</td>
+					<td>{{ ticket.subject }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+		<!-- {% for ticket in tickets %}
+
+			{{ dump(ticket) }}
+
+		{% endfor %} -->
+
+		<a href="{{ path('app_ticket_new') }} " class="btn btn-primary">Créer nouveau ticket</a>
+
 	</div>
 {% endblock %}
