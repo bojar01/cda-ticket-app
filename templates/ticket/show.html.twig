@@ -55,7 +55,16 @@
 
     <a href="{{ path('app_ticket_edit', {'id': ticket.id}) }}">edit</a>
 
-    <a href="#" class="btn btn-success">Aider mon camarade</a>
+    {# <a href="#" class="btn btn-success">Aider mon camarade</a> #}
 
-    {{ include('ticket/_delete_form.html.twig') }}
+    {# {{ include('ticket/_delete_form.html.twig') }} #}
+
+    {# {{ dump(app.user.id) }} #}
+    {# {{ dump(ticket.owner.id) }} #}
+    {% if app.user.id != ticket.owner.id %}
+        {{ include('ticket/_angel_form.html.twig') }}
+    {% else %}
+        {{ include('ticket/_delete_form.html.twig') }}
+        {{ include('ticket/_unsetAngel_form.html.twig') }}
+    {% endif %}
 {% endblock %}
