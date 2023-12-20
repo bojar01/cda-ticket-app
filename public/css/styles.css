@@ -1,3 +1,17 @@
+footer {
+  background-color: pink;
+}
 
+.bg-main-color {
+  background-color: #315397;
+}
 
-/*# sourceMappingURL=styles.css.map */
+.perso-button-light {
+  background-color: #FFFFFF;
+  color: #315397;
+}
+
+.perso-button-main {
+  background-color: #315397;
+  color: #FFFFFF;
+}/*# sourceMappingURL=styles.css.map */

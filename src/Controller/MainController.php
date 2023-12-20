@@ -14,11 +14,10 @@ class MainController extends AbstractController
     #[Route('/', name: 'home')]
     public function index(TicketRepository $ticketRepository): Response
     {
-        $tickets = $ticketRepository->findAll();
-
+        $ticket = $ticketRepository->findAll();
         return $this->render('main/index.html.twig', [
-            'controller_name' => 'MainController',
-            'tickets' => $tickets
+            'controller_name' => 'MainController', 
+            'tickets' => $ticket
         ]);
     }
 }
