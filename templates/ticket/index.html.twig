@@ -4,62 +4,62 @@
 {% endblock %}
 
 {% block body %}
-	<h1>Ticket index</h1>
+	<main class="container">
+		<section class="row">
+			<div class="col-12">
+				<h1>Ticket index</h1>
+			</div>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>name</th>
+						<th>session</th>
+						<th>technology</th>
+						<th>Subject</th>
+						<th>Priority</th>
+						<th>Created_at</th>
+						<th>Updated_at</th>
+						<th>actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for ticket in tickets %}
+						<tr>
+							{# <pre>
+								{{ dump(ticket) }}
+							</pre> #}
+							<td>{{ ticket.id }}</td>
+							<td>{{ ticket.owner.firstname }}
+								{{ ticket.owner.lastname }}</td>
+							<td>
+								{{ ticket.owner.session.name }}
+							</td>
+							<td>{{ ticket.technology.name }}</td>
+							<td>{{ ticket.subject }}</td>
+							<td>
+								{% if ticket.priority %}
+									<span class="badge bg-warning">Elevée</span>
+								{% else %}
+									<span class="badge bg-success">Normale</span>
+								{% endif %}
+							</td>
+							<td>{{ ticket.createdAt ? ticket.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+							<td>{{ ticket.updatedAt ? ticket.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+							<td>
+								<a href="{{ path('app_ticket_show', {'id': ticket.id}) }}">show</a>
+								<a href="{{ path('app_ticket_edit', {'id': ticket.id}) }}">edit</a>
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="6">no records found</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
 
-	<table class="table">
-		<thead>
-			<tr>
-				<th>Id</th>
-				<th>name</th>
-				<th>session</th>
-				<th>technology</th>
-				<th>Subject</th>
-				<th>Priority</th>
-				<th>Created_at</th>
-				<th>Updated_at</th>
-				<th>actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for ticket in tickets %}
-				<tr>
-					<pre>
-                    
-                {# </pre> {{ dump(ticket) }} #}
-					<td>{{ ticket.id }}</td>
-					<td>{{ ticket.owner.firstname }}
-						{{ ticket.owner.lastname }}</td>
-					<td>
-                    {% for session in ticket.owner %}
-                        <pre>
-                            {{ dump(session) }}
-                        </pre>
-                    {% endfor %}
-                    {# {{ ticket.owner.session.name }} #}
-                    </td>
-					<td>{{ ticket.technology.name }}</td>
-					<td>{{ ticket.subject }}</td>
-					<td>
-						{% if ticket.priority %}
-							<span class="badge bg-warning" >Elevée</span>
-						{% else %}
-							<span class="badge bg-success">Normale</span>
-						{% endif %}
-					</td>
-					<td>{{ ticket.createdAt ? ticket.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-					<td>{{ ticket.updatedAt ? ticket.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-					<td>
-						<a href="{{ path('app_ticket_show', {'id': ticket.id}) }}">show</a>
-						<a href="{{ path('app_ticket_edit', {'id': ticket.id}) }}">edit</a>
-					</td>
-				</tr>
-			{% else %}
-				<tr>
-					<td colspan="6">no records found</td>
-				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-
-	<a href="{{ path('app_ticket_new') }}">Create new</a>
+			<a href="{{ path('app_ticket_new') }}">Create new</a>
+		</section>
+	</main>
 {% endblock %}

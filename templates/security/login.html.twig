@@ -11,28 +11,40 @@
 
 		{% if app.user %}
 			<div class="mb-3">
-				You are logged in as
+				Vous Connectez en tant que 
 				{{ app.user.userIdentifier }},
-				<a href="{{ path('app_logout') }}">Logout</a>
+				<a href="{{ path('app_logout') }}">Deconnexion</a>
 			</div>
 		{% endif %}
 
 		<section class="container">
 			<div class="row justify-content-center">
 				<div class="col-xl-10 col-lg-12 col-md-9">
-					<div class="card o-hidden border-0 shadow-lg my-5 p-5">
+					<div class="card o-hidden rounded-4 shadow-lg my-5 p-5 bg-main-color text-white">
 						<div class="card-body p-0">
-							<h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-							<label for="inputEmail">Email</label>
-							<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-							<label for="inputPassword">Password</label>
-							<input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-
-							<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-							<button class="btn btn-lg btn-primary" type="submit">
-								Sign in
-							</button>
+							<div class="text-center">
+								<h1 class="h3 mb-3 font-weight-normal t">Connexion</h1>
+							</div>
+							<div class="form group">
+								<label for="inputEmail" class ="my-2">Email</label>
+								<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+							</div>
+							<div class="form-group">
+								<label for="inputPassword" class ="my-2">Password</label>
+								<input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+								<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+							</div>
+							<div class="text-end mt-2">
+								<a href="http://" target="_blank" rel="noopener noreferrer" class="text-white">Mot de passe oublié ?</a>
+							</div>
+							<div class="text-center">
+								<button class="btn btn-lg my-4 perso-button-light" type="submit">
+									Se connecter
+								</button>
+							</div>
+							<div class="text-end mt-2">
+								<a href="{{ path('app_register') }}" target="_blank" rel="noopener noreferrer" class="text-white">Pas encore de compte ? S'inscrire</a>
+							</div>
 						</div>
 					</div>
 				</div>
