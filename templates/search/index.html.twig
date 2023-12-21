@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'baseDashboard.html.twig' %}
 
 {% block title %}Hello SearchController!
 {% endblock %}
@@ -23,16 +23,6 @@
 			<input type="text" name="r" placeholder="Rechercher...">
 			<button type="submit" class="btn perso-button-main">Rechercher</button>
 		</form>
-
-		{# FAIRE MISE EN PAGE #}
-
-		{# {{ dump(pagination) }} #}
-
-		{# {% for ticket in pagination %}
-				
-				        {{ dump(ticket) }}
-				
-				    {% endfor %} #}
 
 			<section class="container  mt-3"> <div>
 				{% for ticket in pagination %}

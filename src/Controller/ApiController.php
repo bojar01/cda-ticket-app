@@ -33,11 +33,6 @@ class ApiController extends AbstractController
     #[Route('/discord/newticket', methods: ['POST'])]
     public function newTicket(Request $request){
         $data = $request->toArray();
-
-        
-
-
-
         // dd($data);
 
         // $category = $data['technology'];

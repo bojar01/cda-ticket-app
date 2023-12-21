@@ -32,10 +32,10 @@ class RegistrationFormType extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => 'Merci d\'entrer une adresse email valide'
             ])
-            ->add('session', EntityType::class, [
-                'class' => Session::class,
-                'choice_label' => 'name',
-            ])
+            // ->add('session', EntityType::class, [
+            //     'class' => Session::class,
+            //     'choice_label' => 'name',
+            // ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [

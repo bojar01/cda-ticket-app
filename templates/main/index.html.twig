@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'baseDashboard.html.twig' %}
 
 {% block title %}Hello MainController!
 {% endblock %}
@@ -16,6 +16,8 @@
 		<div class="col-12">
 			<h1>Ticket party !</h1>
 		</div>
+
+		{{ include('search/_form.html.twig') }}
 		<section class="container">
 			<div class="row justify-content-center">
 				{% for ticket in userTickets %}

@@ -7,6 +7,7 @@ use App\Form\TicketType;
 use App\Form\TicketEditType;
 use App\Repository\StatusRepository;
 use App\Repository\TicketRepository;
+use App\Services\discordWebHook;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -53,15 +54,27 @@ class TicketController extends AbstractController
                 );
 
                 $ticket->setImage($newFilename);
-                // $ticketsRepository->save($ticket, true);
+            }
 
                 $ticket->setOwner($owner);
                 $ticket->setStatus($status[0]);
                 $entityManager->persist($ticket);
                 $entityManager->flush();
 
+                
+                if($owner->getSession() != null) {
+                    $discordChannelLink = $owner->getSession()->getDiscordChannelLink();
+
+                    if($discordChannelLink != null) {
+                        $ownerName = $owner->getFirstname() . ' ' . $owner->getLastname();
+                        $technology = $ticket->getTechnology()->getName();
+                        $discordMessage = new discordWebHook();
+                        $discordMessage->sender($discordChannelLink, $ownerName, $technology);
+                    }
+
+                }
                 return $this->redirectToRoute('app_ticket_index', [], Response::HTTP_SEE_OTHER);
-            }
+            
 
         }
             return $this->render('ticket/new.html.twig', [
