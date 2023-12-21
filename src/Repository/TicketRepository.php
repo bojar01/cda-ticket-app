@@ -78,4 +78,13 @@ WHERE status.name = 'En attente'";
     
             return $result->fetchAllAssociative();   
         }
+
+        public function findBySubjectLike($subjectPart)
+        {
+            return $this->createQueryBuilder('t')
+                    ->where('t.subject LIKE :subject')
+                    ->setParameter('subject', '%'. $subjectPart . '%')
+                    ->getQuery()
+                    ->getResult();
+        }
 }
