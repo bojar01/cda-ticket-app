@@ -4,6 +4,7 @@
 {% endblock %}
 
 {% block body %}
+<div class="card ard bg-main-color text-white mx-auto mt-5 p-5 rounded-4">
 	<main class="container">
 		<section class="row">
 			<div class="col-12">
@@ -13,11 +14,13 @@
 				<thead>
 					<tr>
 						<th>Id</th>
+						<th>Image</th>
 						<th>name</th>
 						<th>session</th>
+						<th>Priority</th>
 						<th>technology</th>
 						<th>Subject</th>
-						<th>Priority</th>
+						<th>Status</th>
 						<th>Created_at</th>
 						<th>Updated_at</th>
 						<th>actions</th>
@@ -63,8 +66,9 @@
 				</tbody>
 			</table>
 
-			<a href="{{ path('app_ticket_new') }}">Create new</a>
-			<a href="{{ path('app_search') }}">Search</a>
+			<a href="{{ path('app_ticket_new') }}" class="text-white text-center">Create new</a>
+			<a href="{{ path('app_search') }}" class="text-white text-center">Search</a>
 		</section>
 	</main>
+</div>
 {% endblock %}
