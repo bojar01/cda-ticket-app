@@ -6,9 +6,9 @@
 {% block body %}
 
 	<main class="container">
-	<div class="col-12">
-		<h1>Ticket party !</h1>
-	</div>
+		<div class="col-12">
+			<h1>Ticket party !</h1>
+		</div>
 		<section class="container">
 			<div class="row justify-content-center">
 				{% for ticket in tickets %}
@@ -17,75 +17,81 @@
 							<div class="card h-100">
 								<div class="card-body">
 									<p>Ticket #{{ ticket.id }}</p>
-									<h5 class="card-title">Session
-										<span class="badge fs-5 bg-main-color">{{ ticket.owner.session ? ticket.owner.session.name : '' }}</span></h5>
-									<h2>{{ ticket.owner.firstname }}
-										{{ ticket.owner.lastname }}!</h2>
-									<p class="card-text">En
-										{{ ticket.technology.name }}</p>
-									<p>{{ ticket.subject }}</p>
-									<p>
-										{% if ticket.priority %}
-											<span class="badge bg-warning fs-6">Élevée</span>
-										{% else %}
-											<span class="badge bg-success fs-6">Normale</span>
-										{% endif %}
-									</p>
-								</div>
-								<div class="text-center mb-3">
-									<a href="{{ path('app_ticket_show', {'id': ticket.id}) }}" class="btn perso-button-main col-5">
-										Voir
-									</a>
-								</div>
+									<p>Status</p>
+									<span class="badge bg-main-color">{{ ticket.status.name }}</span>
+								</p>
+									<img src="{{ asset('uploads/images/' ~ ticket.image) }}" class="card-img-top" alt="...">
+								<p>
+									{% if ticket.priority %}
+										<span class="badge bg-warning fs-6">Élevée</span>
+									{% else %}
+										<span class="badge bg-success fs-6">Normale</span>
+									{% endif %}
+								</p>
+								<h5 class="card-title">Session
+									<span class="badge fs-5 bg-main-color">{{ ticket.owner.session ? ticket.owner.session.name : '' }}</span>
+								</h5>
+								<h2>{{ ticket.owner.firstname }}
+									{{ ticket.owner.lastname }}!</h2>
+								<p class="card-text">En
+									{{ ticket.technology.name }}</p>
+								<p>{{ ticket.subject }}</p>
+							</div>
+							<div class="text-center mb-3">
+								<a href="{{ path('app_ticket_show', {'id': ticket.id}) }}" class="btn perso-button-main col-5">
+									Voir
+								</a>
 							</div>
 						</div>
-					{% endif %}
-				{% endfor %}
-			</div>
-		</section>
-		<div class="col-12">
+					</div>
+				{% endif %}
+			{% endfor %}
+		</div>
+	</section>
+	<div class="col-12">
 
 
 		<a href="{{ path('app_ticket_new') }} " class="btn btn-primary">Créer nouveau ticket</a>
 
 
 	</div>
-		<div>
-			<h2>Mes tickets</h2>
-		</div>
-		<section class="container">
-			<div class="row justify-content-center">
-				{% for ticket in userTickets %}
-					{% if ticket.id != ticket.owner.id %}
-						<div class="col-4 p-2">
-							<div class="card h-100">
-								<div class="card-body">
-									<p>Ticket #{{ ticket.id }}</p>
-									<h5 class="card-title">Session
-										<span class="badge fs-5 bg-main-color">{{ ticket.owner.session.name }}</span></h5>
-									<h2>{{ ticket.owner.firstname }}
-										{{ ticket.owner.lastname }}!</h2>
-									<p class="card-text">En
-										{{ ticket.technology.name }}</p>
-									<p>{{ ticket.subject }}</p>
-									<p>
-										{% if ticket.priority %}
-											<span class="badge bg-warning fs-6">Élevée</span>
-										{% else %}
-											<span class="badge bg-success fs-6">Normale</span>
-										{% endif %}
-									</p>
-								</div>
-								<div class="text-center mb-3">
-									<a href="{{ path('app_ticket_show', {'id': ticket.id}) }}" class="btn perso-button-main col-5">
-										Voir
-									</a>
-								</div>
+	<div>
+		<h2>Mes tickets</h2>
+	</div>
+	<section class="container">
+		<div class="row justify-content-center">
+			{% for ticket in userTickets %}
+				{% if ticket.id != ticket.owner.id %}
+					<div class="col-4 p-2">
+						<div class="card h-100">
+							<div class="card-body">
+								<p>Ticket #{{ ticket.id }}</p>
+								<h5 class="card-title">Session
+									<span class="badge fs-5 bg-main-color">{{ ticket.owner.session.name }}</span>
+								</h5>
+								<img src="{{ asset('uploads/images/' ~ ticket.image) }}" class="card-img-top" alt="...">
+								<h2>{{ ticket.owner.firstname }}
+									{{ ticket.owner.lastname }}!</h2>
+								<p class="card-text">En
+									{{ ticket.technology.name }}</p>
+								<p>{{ ticket.subject }}</p>
+								<p>
+									{% if ticket.priority %}
+										<span class="badge bg-warning fs-6">Élevée</span>
+									{% else %}
+										<span class="badge bg-success fs-6">Normale</span>
+									{% endif %}
+								</p>
+							</div>
+							<div class="text-center mb-3">
+								<a href="{{ path('app_ticket_show', {'id': ticket.id}) }}" class="btn perso-button-main col-5">
+									Voir
+								</a>
 							</div>
 						</div>
-					{% endif %}
-				{% endfor %}
-			</div>
-		</section>
-	</main>
-{% endblock %}
+					</div>
+				{% endif %}
+			{% endfor %}
+		</div>
+	</section>
+</main>{% endblock %}

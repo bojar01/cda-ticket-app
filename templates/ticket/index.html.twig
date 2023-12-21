@@ -30,10 +30,14 @@
 								{{ dump(ticket) }}
 							</pre> #}
 							<td>{{ ticket.id }}</td>
+							<td>{{ ticket.image }} <img src="{{ asset('uploads/images/' ~ ticket.image) }}" class="card-img-top" alt="..."> </td>
 							<td>{{ ticket.owner.firstname }}
 								{{ ticket.owner.lastname }}</td>
 							<td>
 								{{ ticket.owner.session.name }}
+							</td>
+							<td>
+								{{ ticket.status.name }}
 							</td>
 							<td>{{ ticket.technology.name }}</td>
 							<td>{{ ticket.subject }}</td>
