@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Status;
 use App\Entity\Ticket;
 use App\Form\TicketType;
 use App\Form\TicketEditType;
@@ -89,6 +88,7 @@ class TicketController extends AbstractController
 
             $ticket->setAngel($user);
             $ticket->setStatus($allStatus[1]);
+            $ticket->setUpdatedAt(new \DateTimeImmutable());
 
             $entityManager->flush();
             // dd($ticket);
@@ -106,9 +106,24 @@ class TicketController extends AbstractController
 
             $ticket->setAngel(null);
             $ticket->setStatus($allStatus[0]);
+            $ticket->setUpdatedAt(new \DateTimeImmutable());
 
             $entityManager->flush();
             // dd($ticket);
+        }
+        return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/resolveTicket', 'app_ticket_resolve', methods:['post'])]
+    public function resolve(Request $request, Ticket $ticket, StatusRepository $status, EntityManagerInterface $entityManager):Response
+    {
+        if($this->isCsrfTokenValid('resolve' . $ticket->getId(), $request->request->get('_token'))){
+            $allStatus = $status->findAll();
+
+            $ticket->setStatus($allStatus[2]);
+            $ticket->setUpdatedAt(new \DateTimeImmutable());
+
+            $entityManager->flush();
         }
         return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
     }
