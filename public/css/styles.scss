@@ -8,7 +8,6 @@ $main-color : #315397;
 $secondary-color : #282931;
 $white-color : #FFFFFF;
 
-
 .bg-main-color {
     background-color: $main-color;
 }
@@ -16,9 +15,11 @@ $white-color : #FFFFFF;
 .perso-button-light {
     background-color: $white-color;
     color: $main-color;
+    font-weight: bold;
 }
 
 .perso-button-main {
     background-color: $main-color;
     color : $white-color;
+    font-weight: bold;
 }
