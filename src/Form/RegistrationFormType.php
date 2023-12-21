@@ -7,7 +7,7 @@ use App\Entity\User;
 use App\Entity\Status;
 use App\Entity\Technology;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
@@ -32,10 +32,10 @@ class RegistrationFormType extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => 'Merci d\'entrer une adresse email valide'
             ])
-//             ->add('session', EntityType::class, [
-//                 'class' => Session::class,
-// 'choice_label' => 'name',
-//             ])
+            ->add('session', EntityType::class, [
+                'class' => Session::class,
+                'choice_label' => 'name',
+            ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [

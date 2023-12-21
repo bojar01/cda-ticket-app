@@ -21,51 +21,50 @@ class TicketRepository extends ServiceEntityRepository
         parent::__construct($registry, Ticket::class);
     }
 
-//    /**
-//     * @return Ticket[] Returns an array of Ticket objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('t.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    //    /**
+    //     * @return Ticket[] Returns an array of Ticket objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('t')
+    //            ->andWhere('t.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('t.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
 
-//    public function findOneBySomeField($value): ?Ticket
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    //    public function findOneBySomeField($value): ?Ticket
+    //    {
+    //        return $this->createQueryBuilder('t')
+    //            ->andWhere('t.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 
     public function findTicketsWhereStatusAndExcludedUser($id, $status)
     {
         return $this->createQueryBuilder('t')
-                ->where('t.owner != :id')
-                ->setParameter('id' , $id)
-                ->andWhere('t.status = :status')
-                ->setParameter('status', $status)
-                ->getQuery()
-                ->execute();
+            ->where('t.owner != :id')
+            ->setParameter('id', $id)
+            ->andWhere('t.status = :status')
+            ->setParameter('status', $status)
+            ->getQuery()
+            ->execute();
     }
 
-        public function findLowDataTickets()
-        {
-            $entityManager = $this->getEntityManager();
+    public function findLowDataTickets()
+    {
+        $entityManager = $this->getEntityManager();
 
-            $sql = "SELECT technology.name AS technology, CONCAT(user.firstname, ' ' , user.lastname) AS name, ticket.subject, status.name FROM ticket 
+        $sql = "SELECT technology.name AS technology, CONCAT(user.firstname, ' ' , user.lastname) AS name, ticket.subject, status.name FROM ticket 
             LEFT JOIN technology ON technology_id = technology.id
             LEFT JOIN user ON owner_id = user.id
-			LEFT JOIN status ON status_id = status.id
-WHERE status.name = 'En attente'";
+			      LEFT JOIN status ON status_id = status.id";
     
             $stmt = $entityManager->getConnection()->prepare($sql);
             // if($excludePostId !== null){
@@ -77,7 +76,7 @@ WHERE status.name = 'En attente'";
             // $stmt->
     
             return $result->fetchAllAssociative();   
-        }
+       }
 
         public function findBySubjectLike($subjectPart)
         {

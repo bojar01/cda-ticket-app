@@ -24,9 +24,8 @@ class UserType extends AbstractType
             ->add('updated_at')
             ->add('session', EntityType::class, [
                 'class' => Session::class,
-'choice_label' => 'id',
-            ])
-        ;
+                'choice_label' => 'id',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
