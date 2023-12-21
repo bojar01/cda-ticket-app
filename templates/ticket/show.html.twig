@@ -3,9 +3,10 @@
 {% block title %}Ticket{% endblock %}
 
 {% block body %}
-    <h1>Ticket</h1>
+<div class="card bg-main-color text-white w-75 mx-auto mt-5 p-5 rounded-4">
+    <h1 class="text-center">Ticket</h1>
 
-    {{ dump(ticket) }}
+    {# {{ dump(ticket) }} #}
 
     <table class="table">
         <tbody
@@ -15,7 +16,7 @@
                 <td>#{{ ticket.id }}</td>
             </tr>
             <tr>
-                <th>Name</th>
+                <th>Etudiant</th>
                 <td>{{ ticket.owner.firstname }} {{ ticket.owner.lastname}} </td>
             </tr>
             <tr>
@@ -50,10 +51,19 @@
             </tr>
         </tbody>
     </table>
+    {% if app.user.id != ticket.owner.id %}
+        {{ include('ticket/_angel_form.html.twig') }}
+    {% else %}
+    <div class="d-flex justify-content-between">
+        {{ include('ticket/_delete_form.html.twig') }}
+        {{ include('ticket/_unsetAngel_form.html.twig') }}
+        {{ include('ticket/_resolve_form.html.twig') }}
+    </div>
+    {% endif %}
 
-    <a href="{{ path('app_ticket_index') }}">back to list</a>
-
-    <a href="{{ path('app_ticket_edit', {'id': ticket.id}) }}">edit</a>
+    <a href="{{ path('app_ticket_index') }}" class="text-white text-center">back to list</a>
+    <a href="{{ path('app_ticket_edit', {'id': ticket.id}) }}" class="text-white text-center">edit</a>
+</div>
 
     {# <a href="#" class="btn btn-success">Aider mon camarade</a> #}
 
@@ -61,11 +71,4 @@
 
     {# {{ dump(app.user.id) }} #}
     {# {{ dump(ticket.owner.id) }} #}
-    {% if app.user.id != ticket.owner.id %}
-        {{ include('ticket/_angel_form.html.twig') }}
-    {% else %}
-        {{ include('ticket/_delete_form.html.twig') }}
-        {{ include('ticket/_unsetAngel_form.html.twig') }}
-        {{ include('ticket/_resolve_form.html.twig') }}
-    {% endif %}
 {% endblock %}

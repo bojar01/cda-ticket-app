@@ -1,31 +1,69 @@
 {% extends 'baseDashboard.html.twig' %}
 
-{% block title %}Hello SearchController!{% endblock %}
+{% block title %}Hello SearchController!
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+	<style>
+		.example-wrapper {
+			margin: 1em auto;
+			max-width: 800px;
+			width: 95%;
+			font: 18px / 1.5 sans-serif;
+		}
+		.example-wrapper code {
+			background: #F5F5F5;
+			padding: 2px 6px;
+		}
+	</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+	<div class="example-wrapper">
 
-    {{ include('search/_form.html.twig') }}
+		<form class="text-center" action="{{ path('app_search') }}" method="get">
+			<input type="text" name="r" placeholder="Rechercher...">
+			<button type="submit" class="btn perso-button-main">Rechercher</button>
+		</form>
 
-    {# FAIRE MISE EN PAGE #}
+			<section class="container  mt-3"> <div>
+				{% for ticket in pagination %}
+					{% if ticket.id != ticket.technology.name %}{% endif %}
+					<div class="card mt-3">
+						<h5 class="card-header d-flex justify-content-between">{{ ticket.technology.name }}
+							<span class="badge bg-main-color">{{ ticket.status.name }}</span>
+						</h5>
+						<div class="d-flex row">
+							<div class="card-body col-4 flex-column justify-content-between">
+								<img src="{{ asset('uploads/images/' ~ ticket.image) }}" class="img-fluid" alt="...">
+								<p class="card-text">{{ ticket.subject }}</p>
+							</div>
+							<div class="d-flex col-6 align-items-end flex-column justify-content-center">
+								<h2 class="d-flex justify-content-end">
+									Créer par
+									{{ ticket.owner.firstname }}
+									{{ ticket.owner.lastname }}!</h2>
+								<h2 class="d-flex justify-content-end">
+									{% if ticket.angel is null %}
+										-
+									{% else %}
 
-    {# {{ dump(pagination) }} #}
+										Résolu par
+										{{ ticket.owner.firstname }}
+										{{ ticket.owner.lastname }}!
 
-    {% for ticket in pagination %}
+									{% endif %}
+								</h2>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</section>
 
-        {{ dump(ticket) }}
+		{# {{ dump(pagination) }} #}
+		{# Pagination #}
+        <div class="my-2 text-center">
+		{{ knp_pagination_render(pagination) }}
+        </div>
 
-    {% endfor %}
-
-    {# {{ dump(pagination) }} #}
-    {# Pagination #}
-    {{ knp_pagination_render(pagination) }}
-
-</div>
+	</div>
 {% endblock %}
