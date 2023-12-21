@@ -1,0 +1,4 @@
+<form method="post" action="{{ path('app_ticket_resolve', {'id': ticket.id}) }}" onsubmit="return confirm('Are you sure you want to help this person?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('resolve' ~ ticket.id) }}">
+    <button class="btn btn-success">Probléme résolue</button>
+</form>

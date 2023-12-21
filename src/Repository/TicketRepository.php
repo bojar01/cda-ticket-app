@@ -64,18 +64,26 @@ class TicketRepository extends ServiceEntityRepository
         $sql = "SELECT technology.name AS technology, CONCAT(user.firstname, ' ' , user.lastname) AS name, ticket.subject, status.name FROM ticket 
             LEFT JOIN technology ON technology_id = technology.id
             LEFT JOIN user ON owner_id = user.id
-			LEFT JOIN status ON status_id = status.id
-            WHERE status.name = 'En attente'";
+			      LEFT JOIN status ON status_id = status.id";
+    
+            $stmt = $entityManager->getConnection()->prepare($sql);
+            // if($excludePostId !== null){
+            //     $stmt->bindValue('excludePostId', $excludePostId);
+            // }
+    
+            $result = $stmt->executeQuery();
+    
+            // $stmt->
+    
+            return $result->fetchAllAssociative();   
+       }
 
-        $stmt = $entityManager->getConnection()->prepare($sql);
-        // if($excludePostId !== null){
-        //     $stmt->bindValue('excludePostId', $excludePostId);
-        // }
-
-        $result = $stmt->executeQuery();
-
-        // $stmt->
-
-        return $result->fetchAllAssociative();
-    }
+        public function findBySubjectLike($subjectPart)
+        {
+            return $this->createQueryBuilder('t')
+                    ->where('t.subject LIKE :subject')
+                    ->setParameter('subject', '%'. $subjectPart . '%')
+                    ->getQuery()
+                    ->getResult();
+        }
 }
