@@ -1,0 +1,35 @@
+{% extends 'baseDashboard.html.twig' %}
+
+{% block title %}Technology index{% endblock %}
+
+{% block body %}
+    <h1>Technology index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for technology in technologies %}
+            <tr>
+                <td>{{ technology.id }}</td>
+                <td>{{ technology.name }}</td>
+                <td>
+                    <a href="{{ path('app_technology_show', {'id': technology.id}) }}">show</a>
+                    <a href="{{ path('app_technology_edit', {'id': technology.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_technology_new') }}">Create new</a>
+{% endblock %}

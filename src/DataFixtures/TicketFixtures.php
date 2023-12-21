@@ -25,7 +25,8 @@ class TicketFixtures extends Fixture implements DependentFixtureInterface
             $ticket->setStatus($this->getReference(StatusFixtures::STATUS_REFERENCES));
 
             $ticket->setOwner($this->getReference(UserFixtures::USER_REFERENCE));
-            $ticket->setAngel($this->getReference(UserFixtures::USER_REFERENCE));
+            // $ticket->setAngel($this->getReference(UserFixtures::USER_REFERENCE));
+            $ticket->setImage('default.jpg');
 
             $manager->persist($ticket);
         }

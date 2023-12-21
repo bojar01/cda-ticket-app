@@ -21,6 +21,9 @@ class Session
     #[ORM\OneToMany(mappedBy: 'session', targetEntity: User::class)]
     private Collection $users;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $discordChannelLink = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -69,6 +72,18 @@ class Session
                 $user->setSession(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDiscordChannelLink(): ?string
+    {
+        return $this->discordChannelLink;
+    }
+
+    public function setDiscordChannelLink(?string $discordChannelLink): static
+    {
+        $this->discordChannelLink = $discordChannelLink;
 
         return $this;
     }
