@@ -6,22 +6,33 @@ use App\Entity\Technology;
 use App\Form\TechnologyType;
 use App\Repository\TechnologyRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/technology')]
 class TechnologyController extends AbstractController
 {
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/', name: 'app_technology_index', methods: ['GET'])]
-    public function index(TechnologyRepository $technologyRepository): Response
+    public function index(Request $request,TechnologyRepository $technologyRepository, PaginatorInterface $paginator): Response
     {
+        $technologies = $technologyRepository->findAll();
+
+        $pagination = $paginator->paginate(
+            $technologies,
+            $request->query->getInt('page',1),
+            5
+        );
+
         return $this->render('technology/index.html.twig', [
-            'technologies' => $technologyRepository->findAll(),
+            'pagination' => $pagination
         ]);
     }
-
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/new', name: 'app_technology_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -42,6 +53,7 @@ class TechnologyController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}', name: 'app_technology_show', methods: ['GET'])]
     public function show(Technology $technology): Response
     {
@@ -49,7 +61,7 @@ class TechnologyController extends AbstractController
             'technology' => $technology,
         ]);
     }
-
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}/edit', name: 'app_technology_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Technology $technology, EntityManagerInterface $entityManager): Response
     {
@@ -68,6 +80,7 @@ class TechnologyController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}', name: 'app_technology_delete', methods: ['POST'])]
     public function delete(Request $request, Technology $technology, EntityManagerInterface $entityManager): Response
     {

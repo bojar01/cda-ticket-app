@@ -8,6 +8,19 @@ $main-color : #315397;
 $secondary-color : #282931;
 $white-color : #FFFFFF;
 
+body {
+    color: $secondary-color;
+}
+
+.text-main {
+    color: $main-color;
+}
+
+.full-height {
+    height: 100vh;
+    overflow: hidden;
+}
+
 .bg-main-color {
     background-color: $main-color;
 }
@@ -22,4 +35,26 @@ $white-color : #FFFFFF;
     background-color: $main-color;
     color : $white-color;
     font-weight: bold;
+}
+
+.perso-button-main:hover {
+    background-color: $main-color!important;
+    color : $white-color!important;
+    font-weight: bold!important;
+    filter: brightness(0.8)!important;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -200px; /* Assurez-vous que cette valeur est égale à la largeur de la sidebar */
+    bottom: 0;
+    width: 200px; /* Largeur de la sidebar */
+    transition: left 0.3s; /* Animation de transition */
+    z-index: 1000;
+}
+
+/* Lorsque la sidebar est active (ouvert) */
+.sidebar.active {
+    left: 0;
 }

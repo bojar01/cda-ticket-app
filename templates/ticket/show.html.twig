@@ -1,9 +1,13 @@
-{% extends 'base.html.twig' %}
+{% extends 'baseDashboard.html.twig' %}
 
 {% block title %}Ticket{% endblock %}
 
 {% block body %}
-<div class="card bg-main-color text-white w-75 mx-auto mt-5 p-5 rounded-4">
+<div id="image-modal" style="display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center;">
+	<img id="modal-image" style="max-width: 90%; max-height: 90%;">
+</div>
+{# <div class="card bg-main-color text-white w-75 mx-auto mt-5 p-5 rounded-4"> #}
+<div class="p-5 overflow-y-scroll">
     <h1 class="text-center">Ticket</h1>
 
     {# {{ dump(ticket) }} #}
@@ -14,6 +18,13 @@
             <tr>
                 <th>Ticket Id</th>
                 <td>#{{ ticket.id }}</td>
+            </tr>
+            <tr>
+                <th>Images</th>
+                <td>{% if ticket.image is not null %}
+                        <img src="{{ asset('uploads/images/' ~ ticket.image) }}" class="card-img-top clickable-image" alt="...">
+                    {% endif %}
+                </td>
             </tr>
             <tr>
                 <th>Etudiant</th>
@@ -52,17 +63,38 @@
         </tbody>
     </table>
     {% if app.user.id != ticket.owner.id %}
+        {% if ticket.status == status[0] %}
         {{ include('ticket/_angel_form.html.twig') }}
+        {% endif %}
     {% else %}
     <div class="d-flex justify-content-between">
+        {% if ticket.status != status[2] %}
+
+        <a href="{{ path('app_ticket_edit', {'id': ticket.id}) }}" class="btn perso-button-main text-white text-center">edit</a>
+
         {{ include('ticket/_delete_form.html.twig') }}
+
+        {% endif %}
+
+        {% if ticket.status == status[1] %}
+
         {{ include('ticket/_unsetAngel_form.html.twig') }}
-        {{ include('ticket/_resolve_form.html.twig') }}
+
+        {% endif %}
+
+        {% if ticket.angel is not null %}
+
+        {% if ticket.status != status[2] %}
+
+            {{ include('ticket/_resolve_form.html.twig') }}
+
+        {% endif %}
+
+        {% endif %}
     </div>
     {% endif %}
 
     <a href="{{ path('app_ticket_index') }}" class="text-white text-center">back to list</a>
-    <a href="{{ path('app_ticket_edit', {'id': ticket.id}) }}" class="text-white text-center">edit</a>
 </div>
 
     {# <a href="#" class="btn btn-success">Aider mon camarade</a> #}

@@ -1,26 +1,29 @@
 {% extends 'baseDashboard.html.twig' %}
 
-{% block title %}Technology index{% endblock %}
+{% block title %}Technologies{% endblock %}
 
 {% block body %}
-    <h1>Technology index</h1>
+    <div class="d-flex align-items-center justify-content-between">
+        <h1>Technologies</h1>
+        <a class="btn perso-button-main" href="{{ path('app_technology_new') }}">Créer nouvelle technologie</a>
+    </div>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Name</th>
+                <th>Nom</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for technology in technologies %}
+        {% for technology in pagination %}
             <tr>
                 <td>{{ technology.id }}</td>
                 <td>{{ technology.name }}</td>
                 <td>
-                    <a href="{{ path('app_technology_show', {'id': technology.id}) }}">show</a>
-                    <a href="{{ path('app_technology_edit', {'id': technology.id}) }}">edit</a>
+                    <a class="btn perso-button-main" href="{{ path('app_technology_show', {'id': technology.id}) }}">Voir</a>
+                    <a class="btn perso-button-main" href="{{ path('app_technology_edit', {'id': technology.id}) }}">Modifier</a>
                 </td>
             </tr>
         {% else %}
@@ -31,5 +34,7 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_technology_new') }}">Create new</a>
+    <div class="d-flex align-items-center justify-content-center my-2 text-center">
+		{{ knp_pagination_render(pagination) }}
+    </div>
 {% endblock %}

@@ -67,13 +67,8 @@ class TicketRepository extends ServiceEntityRepository
 			      LEFT JOIN status ON status_id = status.id";
     
             $stmt = $entityManager->getConnection()->prepare($sql);
-            // if($excludePostId !== null){
-            //     $stmt->bindValue('excludePostId', $excludePostId);
-            // }
     
             $result = $stmt->executeQuery();
-    
-            // $stmt->
     
             return $result->fetchAllAssociative();   
        }
