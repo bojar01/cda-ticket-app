@@ -5,24 +5,25 @@
 
 {% block body %}
 
+	<div id="image-modal" style="display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center;">
+		<img id="modal-image" style="max-width: 90%; max-height: 90%;">
+	</div>
+
 	<main class="container">
-		<div class="col-12">
-
-
-			<a href="{{ path('app_ticket_new') }} " class="btn btn-primary mt-2">Créer nouveau ticket</a>
-
-
-		</div>
-		<div class="col-12">
-			<h1>Ticket party !</h1>
-		</div>
-
+	
+		<div class="col-12 my-4">
 		{{ include('search/_form.html.twig') }}
+		</div>
+		<div class="col-12 d-flex justify-content-between align-items-center my-2">
+			<h1>Ticket party !</h1>
+			<a href="{{ path('app_ticket_new') }} " class="btn perso-button-main mt-2">Créer nouveau ticket</a>
+		</div>
+
 		<section class="container">
 			<div class="row justify-content-center">
-				{% for ticket in userTickets %}
+				{% for ticket in tickets %}
 					{% if ticket.id != ticket.owner.id %}
-						<div class="col-4 p-2">
+						<div class="col-12 col-lg-6 col-xl-4 p-2">
 							<div class="card h-100">
 								<div class="card-body">
 									<p class="d-flex justify-content-between">Ticket #{{ ticket.id }}
@@ -30,15 +31,15 @@
 											{{ ticket.status.name}}
 										</span>
 									</p>
-									{% if ticket.image %} 
-										<img src="{{ asset('uploads/images/' ~ ticket.image) }}" class="card-img-top" alt="...">
+									{% if ticket.image is not null %} 
+										<img src="{{ asset('uploads/images/' ~ ticket.image) }}" class="card-img-top clickable-image" alt="...">
 									{% endif %}
 									
 
-									<div class="d-flex justify-content-between p-1">
-									<h5> Session
+									<div class="d-flex justify-content-between p-2 mt-2">
+									<div>
 										<span class="badge fs-5 bg-main-color">{{ ticket.owner.session.name }}</span>
-									</h5>
+									</div>
 										<p>
 											{% if ticket.priority %}
 												<span class="badge bg-warning fs-6">Élevée</span>
@@ -48,14 +49,15 @@
 										</p>
 									</div>
 									<h2>{{ ticket.owner.firstname }}
-										{{ ticket.owner.lastname }}!</h2>
+										{{ ticket.owner.lastname }}</h2>
 									<div class="d-flex justify-content-between">
 										<p class="card-text">Avec
 											{{ ticket.technology.name }}</p>
 										<p class="d-flex justify-content-end">
 											{% if ticket.createdAt %}
-												<span>Créer le :
-													{{ ticket.createdAt ? ticket.createdAt|date('Y-m-d H:i:s') : '' }}</span>
+												<span>
+												{# Créer le : #}
+													{{ ticket.createdAt ? ticket.createdAt|date('d-m-Y H:i:s') : '' }}</span>
 											{% else %}
 												<span>Mis à jour le :
 													{{ ticket.updatedAt ? ticket.updatedAt|date('Y-m-d H:i:s') : '' }}</span>
@@ -65,7 +67,7 @@
 									<p>{{ ticket.subject }}</p>
 								</div>
 								<div class="text-center mb-3">
-									<a href="{{ path('app_ticket_show', {'id': ticket.id}) }}" class="btn perso-button-main col-5">
+									<a href="{{ path('app_ticket_show', {'id': ticket.id}) }}" class="btn perso-button-main ">
 										Aider mon camarade
 									</a>
 								</div>
@@ -81,16 +83,18 @@
 		</div>
 		<section class="container">
 			<div class="row justify-content-center">
-				{% for ticket in tickets %}
+				{% for ticket in userTickets %}
 					{% if ticket.id != ticket.owner.id %}
-						<div class="col-4 p-2">
+						<div class="col-12 col-lg-4 p-2">
 							<div class="card h-100">
 								<div class="card-body">
 									<p class="d-flex justify-content-between">Ticket #{{ ticket.id }}
-										Status
-										<span class="badge bg-main-color">{{ ticket.status.name }}</span>
+										{# Status #}
+										<span class="badge bg-main-color fs-6">{{ ticket.status.name }}</span>
 									</p>
-										<img src="{{ asset('uploads/images/' ~ ticket.image) }}" class="card-img-top" alt="...">
+									{% if ticket.image is not null %}
+										<img src="{{ asset('uploads/images/' ~ ticket.image) }}" class="card-img-top clickable-image" alt="...">
+									{% endif %}
 									<p>
 										{% if ticket.priority %}
 											<span class="badge bg-warning fs-6">Élevée</span>
@@ -98,13 +102,14 @@
 											<span class="badge bg-success fs-6">Normale</span>
 										{% endif %}
 									</p>
-									<h5 class="card-title">Session
+									{# <h5 class="card-title">Session
 										<span class="badge fs-5 bg-main-color">{{ ticket.owner.session ? ticket.owner.session.name : '' }}</span>
 									</h5>
 									<h2>{{ ticket.owner.firstname }}
-										{{ ticket.owner.lastname }}!</h2>
+										{{ ticket.owner.lastname }}!</h2> #}
 									<div class="d-flex justify-content-between">
-										<p class="card-text">Avec
+										<p class="card-text">
+										{# Avec #}
 											{{ ticket.technology.name }}</p>
 										<p class="d-flex justify-content-end">
 											{% if ticket.createdAt %}

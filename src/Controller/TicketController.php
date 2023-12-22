@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Status;
 use App\Entity\Ticket;
 use App\Form\TicketType;
 use App\Form\TicketEditType;
@@ -9,6 +10,7 @@ use App\Repository\StatusRepository;
 use App\Repository\TicketRepository;
 use App\Services\discordWebHook;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,13 +21,33 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/ticket')]
 class TicketController extends AbstractController
 {
+    #[IsGranted('ROLE_STUDENT')]
     #[Route('/', name: 'app_ticket_index', methods: ['GET'])]
-    public function index(TicketRepository $ticketRepository): Response
+    public function index(Request $request, TicketRepository $ticketRepository, PaginatorInterface $paginator): Response
     {
+        $user = $this->getUser();
+        $userId = $user->getId();
+        $userRoles = $user->getRoles();
+
+        if(in_array('ROLE_ADMIN', $userRoles)){
+            $tickets = $ticketRepository->findAll();
+        } else {
+            $tickets = $ticketRepository->findBy(
+                ['owner' => $userId ]
+            );
+        }
+
+        $pagination = $paginator->paginate(
+            $tickets ,
+            $request->query->getInt('page', 1),
+            5
+        );
+
         return $this->render('ticket/index.html.twig', [
-            'tickets' => $ticketRepository->findAll(),
+            'pagination' => $pagination
         ]);
     }
+
     #[IsGranted('ROLE_STUDENT')]
     #[Route('/new', name: 'app_ticket_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, StatusRepository $statusRepository, SluggerInterface $slugger): Response
@@ -84,18 +106,37 @@ class TicketController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_ticket_show', methods: ['GET'])]
-    public function show(Ticket $ticket): Response
+    public function show(Ticket $ticket, StatusRepository $statusRepository): Response
     {
+        $status = $statusRepository->findAll();
+
+
         return $this->render('ticket/show.html.twig', [
             'ticket' => $ticket,
+            'status' => $status
         ]);
     }
 
     #[Route('/{id}/edit', name: 'app_ticket_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Ticket $ticket, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    public function edit(Request $request, Ticket $ticket, StatusRepository $statusRepository ,EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
+        $status = $statusRepository->findAll();
+
         $form = $this->createForm(TicketEditType::class, $ticket);
         $form->handleRequest($request);
+
+        $user = $this->getUser();
+        $userRoles = $user->getRoles();
+
+        if($ticket->getOwner() !== $user){
+            if(!in_array('ROLE_ADMIN', $userRoles)){
+                return $this->redirectToRoute('app_ticket_index', [], Response::HTTP_SEE_OTHER);
+            }
+        }
+
+        if($ticket->getStatus() === $status[2] ){
+            return $this->redirectToRoute('app_ticket_index', [], Response::HTTP_SEE_OTHER);
+        }
 
         if ($form->isSubmitted() && $form->isValid()) 
         {
@@ -113,9 +154,9 @@ class TicketController extends AbstractController
                 );
                 $ticket->setImage($newFilename);
             }
-            // $ticketsRepository->save($ticket, true);
-                $ticket->setUpdatedAt(new \DateTimeImmutable());
-                $entityManager->flush();
+
+            $ticket->setUpdatedAt(new \DateTimeImmutable());
+            $entityManager->flush();
 
             return $this->redirectToRoute('app_ticket_index', [], Response::HTTP_SEE_OTHER);
 
@@ -129,6 +170,12 @@ class TicketController extends AbstractController
     #[Route('/{id}/angel', name: 'app_ticket_angel', methods:['POST'])]
     public function angel(Request $request, Ticket $ticket, StatusRepository $status , EntityManagerInterface $entityManager):Response
     {
+        $user = $this->getUser();
+
+        if($ticket->getOwner() == $user){
+                return $this->redirectToRoute('app_ticket_index', [], Response::HTTP_SEE_OTHER);
+        }
+
         if($this->isCsrfTokenValid('angel' . $ticket->getId(), $request->request->get('_token')))
         {
             $allStatus = $status->findAll();
@@ -148,6 +195,15 @@ class TicketController extends AbstractController
     #[Route('/{id}/unsetangel', name: 'app_ticket_unsetangel', methods:['POST'])]
     public function unresolved(Request $request, Ticket $ticket, StatusRepository $status , EntityManagerInterface $entityManager):Response
     {
+        $user = $this->getUser();
+        $userRoles = $user->getRoles();
+
+        if($ticket->getOwner() !== $user){
+            if(!in_array('ROLE_ADMIN', $userRoles)){
+                return $this->redirectToRoute('app_ticket_index', [], Response::HTTP_SEE_OTHER);
+            }
+        }
+
         if($this->isCsrfTokenValid('unsetangel' . $ticket->getId(), $request->request->get('_token')))
         {
             $allStatus = $status->findAll();
@@ -167,6 +223,15 @@ class TicketController extends AbstractController
     #[Route('/{id}/resolveTicket', 'app_ticket_resolve', methods:['post'])]
     public function resolve(Request $request, Ticket $ticket, StatusRepository $status, EntityManagerInterface $entityManager):Response
     {
+        $user = $this->getUser();
+        $userRoles = $user->getRoles();
+
+        if($ticket->getOwner() !== $user){
+            if(!in_array('ROLE_ADMIN', $userRoles)){
+                return $this->redirectToRoute('app_ticket_index', [], Response::HTTP_SEE_OTHER);
+            }
+        }
+
         if($this->isCsrfTokenValid('resolve' . $ticket->getId(), $request->request->get('_token'))){
             $allStatus = $status->findAll();
 
@@ -181,6 +246,15 @@ class TicketController extends AbstractController
     #[Route('/{id}', name: 'app_ticket_delete', methods: ['POST'])]
     public function delete(Request $request, Ticket $ticket, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->getUser();
+        $userRoles = $user->getRoles();
+
+        if($ticket->getOwner() !== $user){
+            if(!in_array('ROLE_ADMIN', $userRoles)){
+                return $this->redirectToRoute('app_ticket_index', [], Response::HTTP_SEE_OTHER);
+            }
+        }
+
         if ($this->isCsrfTokenValid('delete' . $ticket->getId(), $request->request->get('_token'))) 
         {
             $entityManager->remove($ticket);

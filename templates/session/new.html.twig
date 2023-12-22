@@ -1,11 +1,13 @@
 {% extends 'baseDashboard.html.twig' %}
 
-{% block title %}New Session{% endblock %}
+{% block title %}Créer session{% endblock %}
 
 {% block body %}
-    <h1>Create new Session</h1>
+    <h1>Créer session</h1>
 
+    <div>
     {{ include('session/_form.html.twig') }}
 
-    <a href="{{ path('app_session_index') }}">back to list</a>
+    <a class="btn perso-button-main mt-4" href="{{ path('app_session_index') }}">Retour à la liste</a>
+    </div>
 {% endblock %}

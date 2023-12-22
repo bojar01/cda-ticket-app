@@ -4,36 +4,48 @@
 {% endblock %}
 
 {% block body %}
-<div class="card ard bg-main-color text-white mx-auto mt-5 p-5 rounded-4">
+<div id="image-modal" style="display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center;">
+	<img id="modal-image" style="max-width: 90%; max-height: 90%;">
+</div>
+
+{# <div class="card bg-main-color text-white mx-auto mt-5 p-5 rounded-4"> #}
+<div class="">
+
 	<main class="container">
 		<section class="row">
 			<div class="col-12">
-				<h1>Ticket index</h1>
+				<h1>Liste des tickets</h1>
 			</div>
+			<div class="overflow-x-scroll">
 			<table class="table">
 				<thead>
 					<tr>
 						<th>Id</th>
 						<th>Image</th>
-						<th>name</th>
-						<th>session</th>
-						<th>Priority</th>
-						<th>technology</th>
-						<th>Subject</th>
+						<th>Nom</th>
+						<th>Session</th>
 						<th>Status</th>
-						<th>Created_at</th>
-						<th>Updated_at</th>
+						<th>technologie</th>
+						<th>Sujet</th>
+						<th>Prioritée</th>
+						<th>Angel</th>
+						<th>Créé</th>
+						<th>Modifié</th>
 						<th>actions</th>
 					</tr>
 				</thead>
 				<tbody>
-					{% for ticket in tickets %}
+					{% for ticket in pagination %}
 						<tr>
 							{# <pre>
 								{{ dump(ticket) }}
 							</pre> #}
 							<td>{{ ticket.id }}</td>
-							<td>{{ ticket.image }} <img src="{{ asset('uploads/images/' ~ ticket.image) }}" class="card-img-top" alt="..."> </td>
+							<td>{% if ticket.image %}
+									<img src="{{ asset('uploads/images/' ~ ticket.image) }}" class="card-img-top clickable-image" alt="...">
+									
+								{% endif %}
+							</td>
 							<td>{{ ticket.owner.firstname }}
 								{{ ticket.owner.lastname }}</td>
 							<td>
@@ -51,11 +63,17 @@
 									<span class="badge bg-success">Normale</span>
 								{% endif %}
 							</td>
-							<td>{{ ticket.createdAt ? ticket.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-							<td>{{ ticket.updatedAt ? ticket.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+							<td>{% if ticket.angel is not null %}
+
+								{{ ticket.angel.firstname}} {{ ticket.angel.lastname }}
+
+								{% endif %}
+							</td>
+							<td>{{ ticket.createdAt ? ticket.createdAt|date('d-m-Y H:i:s') : '' }}</td>
+							<td>{{ ticket.updatedAt ? ticket.updatedAt|date('d-m-Y H:i:s') : '' }}</td>
 							<td>
-								<a href="{{ path('app_ticket_show', {'id': ticket.id}) }}">show</a>
-								<a href="{{ path('app_ticket_edit', {'id': ticket.id}) }}">edit</a>
+								<a class="btn perso-button-main" href="{{ path('app_ticket_show', {'id': ticket.id}) }}">Voir</a>
+								<a class="btn perso-button-main" href="{{ path('app_ticket_edit', {'id': ticket.id}) }}">Modifier</a>
 							</td>
 						</tr>
 					{% else %}
@@ -65,10 +83,14 @@
 					{% endfor %}
 				</tbody>
 			</table>
+			</div>
 
 			<a href="{{ path('app_ticket_new') }}" class="text-white text-center">Create new</a>
 			<a href="{{ path('app_search') }}" class="text-white text-center">Search</a>
 		</section>
 	</main>
+	<div class="d-flex align-items-center justify-content-center my-2 text-center">
+		{{ knp_pagination_render(pagination) }}
+    </div>
 </div>
 {% endblock %}

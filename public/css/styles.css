@@ -1,3 +1,17 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  color: #282931;
+}
+
+.text-main {
+  color: #315397;
+}
+
 footer {
   background-color: pink;
 }
@@ -16,4 +30,17 @@ footer {
   background-color: #315397;
   color: #FFFFFF;
   font-weight: bold;
-}/*# sourceMappingURL=styles.css.map */
+}
+.perso-button-main:hover {
+  background-color: #315397;
+  color: #FFFFFF;
+  font-weight: bold;
+  filter: brightness(0.8)!important;
+}
+
+.full-height {
+  height: 100vh;
+}
+
+
+/*# sourceMappingURL=styles.css.map */

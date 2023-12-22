@@ -8,13 +8,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class SearchController extends AbstractController
 {
+    #[IsGranted('ROLE_STUDENT')]
     #[Route('/recherche', name: 'app_search')]
     public function index(Request $request,TicketRepository $ticketRepository, PaginatorInterface $paginator): Response
     {
-        $query = $request->query->get('r');
+        $query = htmlspecialchars($request->query->get('r'));
 
         if(!empty($query)){
             $tickets = $ticketRepository->findBySubjectLike(htmlspecialchars($query));

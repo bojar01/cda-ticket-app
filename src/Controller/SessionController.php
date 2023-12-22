@@ -6,22 +6,33 @@ use App\Entity\Session;
 use App\Form\SessionType;
 use App\Repository\SessionRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/session')]
 class SessionController extends AbstractController
 {
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/', name: 'app_session_index', methods: ['GET'])]
-    public function index(SessionRepository $sessionRepository): Response
+    public function index(Request $request, SessionRepository $sessionRepository, PaginatorInterface $paginator): Response
     {
+    $sessions = $sessionRepository->findAll();
+
+    $pagination = $paginator->paginate(
+        $sessions,
+        $request->query->getInt('page', 1),
+        5
+    );
         return $this->render('session/index.html.twig', [
-            'sessions' => $sessionRepository->findAll(),
+            'pagination' => $pagination
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/new', name: 'app_session_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -42,6 +53,7 @@ class SessionController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}', name: 'app_session_show', methods: ['GET'])]
     public function show(Session $session): Response
     {
@@ -50,6 +62,7 @@ class SessionController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}/edit', name: 'app_session_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Session $session, EntityManagerInterface $entityManager): Response
     {
@@ -68,6 +81,7 @@ class SessionController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}', name: 'app_session_delete', methods: ['POST'])]
     public function delete(Request $request, Session $session, EntityManagerInterface $entityManager): Response
     {

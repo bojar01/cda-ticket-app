@@ -1,0 +1,51 @@
+{% extends 'baseDashboard.html.twig' %}
+
+{% block title %}Hello AccountController!{% endblock %}
+
+{% block body %}
+
+<div>
+    <h1>Mon compte</h1>
+
+    {# {{ dump(user) }} #}
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Email</th>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <th>Session</th>
+                <td>
+                    {% if user.session %}
+
+                    <span class="badge bg-main-color text-white fs-6">{{ user.session.name }}</span>
+
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Firstname</th>
+                <td>{{ user.firstname }}</td>
+            </tr>
+            <tr>
+                <th>Lastname</th>
+                <td>{{ user.lastname }}</td>
+            </tr>
+            <tr>
+                <th>Créé le</th>
+                <td>{{ user.createdAt ? user.createdAt|date('d-m-Y H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <a class="btn perso-button-main" href="{{ path('app_account_edit')}}">Modifier mes information</a>
+    {# <a class="btn perso-button-main" href="{{ path('app_account_edit')}}">Changer mot de passe</a> #}
+
+    {# {{ include('user/_delete_form.html.twig') }} #}
+
+    
+</div>
+{% endblock %}

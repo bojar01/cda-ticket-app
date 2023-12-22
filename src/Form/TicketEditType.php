@@ -26,14 +26,14 @@ class TicketEditType extends AbstractType
             ->add('priority', null, [
                 'label' => 'Je suis bloqué et je ne peux plus avancer'
             ])
-            ->add('status', EntityType::class, [
-                'class' => Status::class,
-                'choice_label' => 'name',
-            ])
-            ->add('angel', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'firstname',
-            ])
+            // ->add('status', EntityType::class, [
+            //     'class' => Status::class,
+            //     'choice_label' => 'name',
+            // ])
+            // ->add('angel', EntityType::class, [
+            //     'class' => User::class,
+            //     'choice_label' => 'firstname',
+            // ])
             ->add('image', FileType::class, [
                 'label' => 'Photo de l’article',
                 'mapped' => false,

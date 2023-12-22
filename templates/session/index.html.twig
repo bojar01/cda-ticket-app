@@ -1,10 +1,13 @@
 {% extends 'baseDashboard.html.twig' %}
 
-{% block title %}Session index{% endblock %}
+{% block title %}Sessions{% endblock %}
 
 {% block body %}
-    <h1>Session index</h1>
-
+<div class="d-flex align-items-center justify-content-between">
+    <h1>Sessions</h1>
+    <a class="btn perso-button-main my-4" href="{{ path('app_session_new') }}">Créer nouvelle session</a>
+</div>
+    <div class="overflow-x-scroll">
     <table class="table">
         <thead>
             <tr>
@@ -15,14 +18,14 @@
             </tr>
         </thead>
         <tbody>
-        {% for session in sessions %}
+        {% for session in pagination %}
             <tr>
                 <td>{{ session.id }}</td>
                 <td>{{ session.name }}</td>
-                <td>{{ session.discordChannelLink }}</td>
+                <td>{{ session.discordChannelLink|slice(0,60) }}...</td>
                 <td>
-                    <a href="{{ path('app_session_show', {'id': session.id}) }}">show</a>
-                    <a href="{{ path('app_session_edit', {'id': session.id}) }}">edit</a>
+                    <a class="btn perso-button-main" href="{{ path('app_session_show', {'id': session.id}) }}">Voir</a>
+                    <a class="btn perso-button-main" href="{{ path('app_session_edit', {'id': session.id}) }}">Modifier</a>
                 </td>
             </tr>
         {% else %}
@@ -32,6 +35,9 @@
         {% endfor %}
         </tbody>
     </table>
+    </div>
 
-    <a href="{{ path('app_session_new') }}">Create new</a>
+    <div class="d-flex align-items-center justify-content-center my-2 text-center">
+		{{ knp_pagination_render(pagination) }}
+    </div>
 {% endblock %}

@@ -3,38 +3,42 @@
     {# {{ dump(pagination)}} #}
 
     {# {{ dump(pageCount) }} #}
+    {% if pageCount > 1 %}
 
     <ul class="pagination">
         {% if previous is defined %}
             <li class="page-item">
-                <a class="page-link" href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({(pageParameterName): previous})) }}" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
+                <a class="page-link text-main" href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({(pageParameterName): previous})) }}" aria-label="Previous">
+                    <span aria-hidden="true">Page précédente</span>
                 </a>
             </li>
         {% else %}
             <li class="page-item disabled">
-                <span class="page-link">&laquo;</span>
+                <span class="page-link">Page précédente</span>
             </li>
         {% endif %}
 
         {# {{ dump(pagination.next) }} #}
-
+        
         {% for page in 1..pageCount %}
-            <li class="page-item{{ page == current ? ' active' : '' }}">
-                <a class="page-link" href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({(pageParameterName): page})) }}">{{ page }}</a>
+            <li class="{{ page == current ? 'page-item' : '' }}">
+                <a class="{{ page == current ? 'page-link perso-button-main' : 'page-link text-main' }}" href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({(pageParameterName): page})) }}">{{ page }}</a>
             </li>
         {% endfor %}
 
         {% if next is defined %}
             <li class="page-item">
-                <a class="page-link" href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({(pageParameterName): next})) }}" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
+                <a class="page-link text-main" href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({(pageParameterName): next})) }}" aria-label="Next">
+                    <span aria-hidden="true">Page suivante</span>
                 </a>
             </li>
         {% else %}
             <li class="page-item disabled">
-                <span class="page-link">&raquo;</span>
+                <span class="page-link">Page suivante</span>
             </li>
         {% endif %}
+
     </ul>
+
+    {% endif %}
 </nav>
